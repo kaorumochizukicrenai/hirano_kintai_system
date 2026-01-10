@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>従業員情報編集画面（管理者）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {{ font-family: 'Inter', 'Noto Sans JP', sans-serif; }}
+    .bg-canvas {{ position: fixed; inset: 0; z-index: -1; }}
+  </style>
+</head>
+<body class="min-h-screen text-slate-900">
+  <canvas id="bg" class="bg-canvas"></canvas>
+  <div class="relative">
+    <header class="sticky top-0 backdrop-blur bg-white/70 border-b border-slate-200">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center">
+            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-widest text-slate-500">Kintai UX</p>
+            <h1 class="text-lg font-semibold">従業員情報編集画面（管理者）</h1>
+          </div>
+        </div>
+        <button class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900" onclick="navigateTo('login')">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          ログインへ
+        </button>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-10 space-y-8">
+      <section class="rounded-3xl border border-slate-200 bg-white/80 shadow-lg shadow-slate-200/40 overflow-hidden">
+        <div class="grid lg:grid-cols-[1.4fr,1fr]">
+          <div class="p-8">
+            <p class="text-sm text-slate-500">業務に集中できる落ち着いたトーンで、主要アクションを整理。</p>
+            <h2 class="text-2xl font-semibold mt-2">ユーザー視点の操作導線を明確化</h2>
+            <p class="text-slate-600 mt-4">各画面に必須要素を配置し、次のアクションへ迷わず進める構成です。ボタンはすべて遷移先を設定しています。</p>
+          </div>
+          <div class="min-h-[220px] bg-[url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center"></div>
+        </div>
+      </section>
+
+      <section class="grid lg:grid-cols-[1.2fr,1fr] gap-6">
+        <div class="rounded-3xl border border-slate-200 bg-white/85 p-6 shadow-sm">
+          <div class="flex items-center gap-2 text-slate-700">
+            <i data-lucide="list-checks" class="w-5 h-5"></i>
+            <h3 class="font-semibold">画面要素</h3>
+          </div>
+          <ul class="mt-4 grid gap-3 text-sm text-slate-600">
+            <li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>メンバーID入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>氏名入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>住所入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>連絡先入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>緊急連絡先入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>銀行口座入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>控除&加算項目入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>ログインID入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>所属入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>雇用形態入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>状態入力欄</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>更新するボタン</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>戻るボタン</span></li>
+<li class="flex items-start gap-2"><span class="mt-1 h-2 w-2 rounded-full bg-slate-400"></span><span>入力エラーメッセージテキスト</span></li>
+          </ul>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-white/85 p-6 shadow-sm">
+          <div class="flex items-center gap-2 text-slate-700">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <h3 class="font-semibold">アクション</h3>
+          </div>
+          <div class="mt-4 grid gap-3">
+            <button class="w-full text-left px-4 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition flex items-center justify-between" data-target="employee-update-confirm">
+  <span>更新する</span>
+  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+</button>
+<button class="w-full text-left px-4 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition flex items-center justify-between" data-target="employee-admin-list">
+  <span>戻る</span>
+  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-3xl border border-slate-200 bg-white/85 p-6 shadow-sm">
+        <div class="flex items-center gap-2 text-slate-700">
+          <i data-lucide="info" class="w-5 h-5"></i>
+          <h3 class="font-semibold">補足</h3>
+        </div>
+        <p class="mt-3 text-sm text-slate-600">動的背景はグラデーションの大きな粒子が移動する表現で、画像自体を動かさない構成です。ボタンはすべて別画面への遷移設定済みです。</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    const orbs = Array.from({ length: 6 }).map((_, i) => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: 220 + Math.random() * 220,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6,
+      hue: 210 + i * 12,
+    }));
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, w, h);
+
+      for (const orb of orbs) {
+        orb.x += orb.vx;
+        orb.y += orb.vy;
+        if (orb.x < -orb.r || orb.x > w + orb.r) orb.vx *= -1;
+        if (orb.y < -orb.r || orb.y > h + orb.r) orb.vy *= -1;
+
+        const gradient = ctx.createRadialGradient(orb.x, orb.y, orb.r * 0.2, orb.x, orb.y, orb.r);
+        gradient.addColorStop(0, `hsla(${orb.hue}, 70%, 70%, 0.35)`);
+        gradient.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(orb.x, orb.y, orb.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    function navigateTo(key) {
+      if (!key) return;
+      window.location.href = `../${key}/index.html`;
+    }
+
+    document.querySelectorAll('[data-target]').forEach((btn) => {
+      btn.addEventListener('click', () => navigateTo(btn.dataset.target));
+    });
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
