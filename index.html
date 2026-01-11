@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>勤怠管理UXモック</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef3ff',
+              100: '#dbe5ff',
+              200: '#b6ccff',
+              300: '#8ab1ff',
+              400: '#5f93ff',
+              500: '#3b74ff',
+              600: '#2a5ee6',
+              700: '#1f46b4',
+              800: '#17358a',
+              900: '#122a6c'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: "Inter", "Noto Sans JP", sans-serif;
+    }
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+      animation: slideIn 0.4s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .modal {
+      display: none;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+    .glass {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(14px);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-900">
+  <canvas id="motion-bg" class="bg-canvas"></canvas>
+
+  <header class="fixed top-0 left-0 right-0 z-40">
+    <div class="glass border-b border-white/40">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+        <button id="home-logo" class="flex items-center gap-2 text-brand-900">
+          <i data-lucide="building-2" class="h-5 w-5"></i>
+          <span class="text-sm font-semibold">Kintai Suite</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button class="rounded-full bg-white/80 p-2 text-brand-900 shadow" data-open-modal="modal-notification">
+            <i data-lucide="bell" class="h-4 w-4"></i>
+          </button>
+          <button id="menu-toggle" class="rounded-full bg-brand-700 p-2 text-white shadow">
+            <i data-lucide="menu" class="h-4 w-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <footer class="fixed bottom-0 left-0 right-0 z-30">
+    <div class="glass border-t border-white/40">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-xs text-slate-600">
+        <span>© 2025 Kintai Suite</span>
+        <span class="hidden sm:inline">Version 0.1 UX Mock</span>
+      </div>
+    </div>
+  </footer>
+
+  <main class="mx-auto min-h-screen max-w-7xl px-4 pb-24 pt-20">
+    <section id="screen-login" class="screen active">
+      <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div class="rounded-3xl bg-white/90 p-8 shadow-xl">
+          <div class="flex items-center gap-3">
+            <div class="rounded-2xl bg-brand-700 p-3 text-white">
+              <i data-lucide="fingerprint" class="h-5 w-5"></i>
+            </div>
+            <div>
+              <h1 class="text-2xl font-semibold text-slate-900">勤怠管理へログイン</h1>
+              <p class="text-sm text-slate-600">企業の勤怠・申請・給与を一元管理。</p>
+            </div>
+          </div>
+          <div class="mt-8 space-y-4">
+            <div>
+              <label class="text-xs font-semibold text-slate-500">ログインID</label>
+              <input type="text" class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 text-sm" placeholder="IDを入力" />
+              <p class="mt-2 hidden text-xs text-rose-500" data-error="login">ログインIDが無効です。</p>
+            </div>
+            <button class="w-full rounded-xl bg-brand-700 py-3 text-sm font-semibold text-white shadow" data-open-modal="modal-loading" data-next-screen="screen-employee-home">ログイン</button>
+            <div class="flex justify-between text-xs text-slate-500">
+              <button class="underline" data-open-modal="modal-login-error">dev: エラー表示</button>
+              <button class="underline" data-screen-target="screen-admin-home">dev: 管理者ログイン</button>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-3xl bg-white/80 p-8 shadow-xl">
+          <img class="h-48 w-full rounded-2xl object-cover" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80" alt="" />
+          <div class="mt-6 space-y-4 text-sm text-slate-600">
+            <p>打刻、申請、承認、給与明細をひとつのワークフローで。</p>
+            <ul class="grid gap-3">
+              <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="mt-0.5 h-4 w-4 text-brand-700"></i>従業員と管理者の画面を切替可能</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="mt-0.5 h-4 w-4 text-brand-700"></i>すべての申請にステータス管理</li>
+              <li class="flex items-start gap-2"><i data-lucide="check-circle-2" class="mt-0.5 h-4 w-4 text-brand-700"></i>レスポンシブで外出先からも確認</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-employee-home" class="screen">
+      <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div class="space-y-6">
+          <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold">最新のお知らせ</h2>
+              <div class="flex gap-2">
+                <button class="tab-button rounded-full bg-brand-700 px-4 py-1 text-xs font-semibold text-white" data-tab-target="tab-news">お知らせ</button>
+                <button class="tab-button rounded-full bg-slate-100 px-4 py-1 text-xs font-semibold text-slate-500" data-tab-target="tab-tasks">タスク</button>
+              </div>
+            </div>
+            <div id="tab-news" class="tab-content mt-4 space-y-3">
+              <div class="rounded-2xl border border-slate-100 p-4">
+                <div class="text-xs font-semibold text-brand-700">有給の却下</div>
+                <div class="text-xs text-slate-400">2025/05/18 09:12</div>
+                <div class="mt-1 text-sm text-slate-700">有給申請が却下されました。理由をご確認ください。</div>
+              </div>
+              <div class="rounded-2xl border border-slate-100 p-4">
+                <div class="text-xs font-semibold text-brand-700">打刻忘れ</div>
+                <div class="text-xs text-slate-400">2025/05/17 20:45</div>
+                <div class="mt-1 text-sm text-slate-700">本日の退勤打刻が未登録です。</div>
+              </div>
+            </div>
+            <div id="tab-tasks" class="tab-content mt-4 hidden space-y-3">
+              <div class="rounded-2xl border border-slate-100 p-4 text-sm text-slate-700">月末締めに向けて残業申請の確認をお願いします。</div>
+            </div>
+          </div>
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+              <h3 class="text-sm font-semibold text-slate-700">打刻</h3>
+              <div class="mt-4 grid grid-cols-2 gap-3">
+                <button class="rounded-2xl bg-brand-700 px-3 py-3 text-sm font-semibold text-white" data-screen-target="screen-punch">出勤</button>
+                <button class="rounded-2xl bg-brand-100 px-3 py-3 text-sm font-semibold text-brand-700" data-screen-target="screen-punch">中抜け/休憩開始</button>
+                <button class="rounded-2xl bg-brand-100 px-3 py-3 text-sm font-semibold text-brand-700" data-screen-target="screen-punch">戻り</button>
+                <button class="rounded-2xl bg-brand-700 px-3 py-3 text-sm font-semibold text-white" data-screen-target="screen-punch">退勤</button>
+              </div>
+            </div>
+            <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+              <h3 class="text-sm font-semibold text-slate-700">クイックアクセス</h3>
+              <div class="mt-4 grid gap-2 text-sm">
+                <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-attendance-history">打刻履歴</button>
+                <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-leave">有給申請・残有給数確認</button>
+                <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-payslip-list">給与明細</button>
+                <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-employee-change-list">従業員情報変更申請</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+            <h3 class="text-sm font-semibold text-slate-700">ステータス</h3>
+            <div class="mt-4 space-y-3 text-sm text-slate-600">
+              <div class="flex items-center justify-between"><span>残有給数</span><span class="font-semibold text-slate-900">8日</span></div>
+              <div class="flex items-center justify-between"><span>今月の打刻回数</span><span class="font-semibold text-slate-900">18回</span></div>
+              <div class="flex items-center justify-between"><span>未処理申請</span><span class="font-semibold text-brand-700">1件</span></div>
+            </div>
+          </div>
+          <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+            <h3 class="text-sm font-semibold text-slate-700">アカウント</h3>
+            <div class="mt-4 flex items-center justify-between text-sm">
+              <span class="text-slate-600">社員番号 01234</span>
+              <button class="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600" data-open-modal="modal-logout">ログアウト</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-admin-home" class="screen">
+      <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div class="space-y-6">
+          <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+            <h2 class="text-lg font-semibold">最新のお知らせ</h2>
+            <div class="mt-4 space-y-3">
+              <div class="rounded-2xl border border-slate-100 p-4">
+                <div class="text-xs font-semibold text-brand-700">有給申請</div>
+                <div class="text-xs text-slate-400">2025/05/19 08:50</div>
+                <div class="mt-1 text-sm text-slate-700">新しい有給申請が届いています。</div>
+              </div>
+              <div class="rounded-2xl border border-slate-100 p-4">
+                <div class="text-xs font-semibold text-brand-700">締め作業</div>
+                <div class="text-xs text-slate-400">2025/05/16 09:10</div>
+                <div class="mt-1 text-sm text-slate-700">月次締め作業日が近づいています。</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid gap-3 md:grid-cols-2">
+            <button class="rounded-2xl bg-brand-700 px-4 py-4 text-sm font-semibold text-white" data-screen-target="screen-admin-leave-list">有給申請一覧</button>
+            <button class="rounded-2xl bg-brand-100 px-4 py-4 text-sm font-semibold text-brand-700" data-screen-target="screen-admin-change-list">従業員情報変更申請一覧</button>
+            <button class="rounded-2xl bg-brand-100 px-4 py-4 text-sm font-semibold text-brand-700" data-screen-target="screen-monthly-close">月次締め作業</button>
+            <button class="rounded-2xl bg-brand-700 px-4 py-4 text-sm font-semibold text-white" data-screen-target="screen-admin-attendance-list">打刻履歴</button>
+            <button class="rounded-2xl bg-brand-100 px-4 py-4 text-sm font-semibold text-brand-700" data-screen-target="screen-admin-employee-list">従業員情報&給与計算情報</button>
+            <button class="rounded-2xl bg-brand-100 px-4 py-4 text-sm font-semibold text-brand-700" data-screen-target="screen-admin-admin-list">管理者情報</button>
+            <button class="rounded-2xl bg-brand-100 px-4 py-4 text-sm font-semibold text-brand-700" data-screen-target="screen-deduction-list">控除&加算項目編集</button>
+            <button class="rounded-2xl bg-brand-700 px-4 py-4 text-sm font-semibold text-white" data-screen-target="screen-company-info">会社情報編集</button>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+            <h3 class="text-sm font-semibold text-slate-700">管理ステータス</h3>
+            <div class="mt-4 space-y-3 text-sm text-slate-600">
+              <div class="flex items-center justify-between"><span>未承認申請</span><span class="font-semibold text-brand-700">3件</span></div>
+              <div class="flex items-center justify-between"><span>今月の締め</span><span class="font-semibold text-slate-900">未実施</span></div>
+              <div class="flex items-center justify-between"><span>従業員数</span><span class="font-semibold text-slate-900">128名</span></div>
+            </div>
+          </div>
+          <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+            <h3 class="text-sm font-semibold text-slate-700">アカウント</h3>
+            <div class="mt-4 flex items-center justify-between text-sm">
+              <span class="text-slate-600">管理者ID AD-01</span>
+              <button class="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600" data-open-modal="modal-logout">ログアウト</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-hamburger-employee" class="screen">
+      <div class="mx-auto max-w-md rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">メニュー（従業員）</h2>
+        <div class="mt-4 grid gap-2 text-sm">
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-punch">打刻</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-attendance-history">打刻履歴</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-leave">有給申請・残有給数確認</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-payslip-list">給与明細</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-employee-change-list">従業員情報変更申請</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-password-employee">ログイン情報変更</button>
+          <button class="rounded-xl border border-rose-200 px-4 py-3 text-left text-rose-500" data-open-modal="modal-logout">ログアウト</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-employee-home">戻る</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-hamburger-admin" class="screen">
+      <div class="mx-auto max-w-md rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">メニュー（管理者）</h2>
+        <div class="mt-4 grid gap-2 text-sm">
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-admin-leave-list">有給申請一覧</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-admin-change-list">従業員情報変更申請一覧</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-monthly-close">月次締め作業</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-admin-attendance-list">打刻履歴</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-admin-employee-list">従業員情報&給与計算情報</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-admin-admin-list">管理者情報</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-deduction-list">控除&加算項目編集</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-company-info">会社情報編集</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-password-admin">ログイン情報変更</button>
+          <button class="rounded-xl border border-rose-200 px-4 py-3 text-left text-rose-500" data-open-modal="modal-logout">ログアウト</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3 text-left" data-screen-target="screen-admin-home">戻る</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-password-employee" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">ログイン情報変更（従業員）</h2>
+        <div class="mt-4 space-y-4 text-sm">
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="旧パスワード" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="新パスワード" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="新パスワード確認" />
+          <p class="hidden text-xs text-rose-500" data-error="password-employee">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-password-confirm">変更する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-hamburger-employee">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-password-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-password-admin" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">ログイン情報変更（管理者）</h2>
+        <div class="mt-4 space-y-4 text-sm">
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="旧パスワード" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="新パスワード" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="新パスワード確認" />
+          <p class="hidden text-xs text-rose-500" data-error="password-admin">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-password-confirm">変更する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-hamburger-admin">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-password-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-punch" class="screen">
+      <div class="mx-auto max-w-2xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">打刻</h2>
+        <div class="mt-4 grid gap-3 text-sm text-slate-600">
+          <div>メンバーID: 01234</div>
+          <div>メンバー名: 山田 太郎</div>
+          <div>現在日時: 2025/05/19 09:12</div>
+        </div>
+        <div class="mt-6 grid grid-cols-2 gap-3">
+          <button class="rounded-2xl bg-brand-700 px-4 py-3 text-sm font-semibold text-white" data-open-modal="modal-punch-confirm">出勤</button>
+          <button class="rounded-2xl bg-brand-100 px-4 py-3 text-sm font-semibold text-brand-700" data-open-modal="modal-punch-confirm">中抜け/休憩開始</button>
+          <button class="rounded-2xl bg-brand-100 px-4 py-3 text-sm font-semibold text-brand-700" data-open-modal="modal-punch-confirm">戻り</button>
+          <button class="rounded-2xl bg-brand-700 px-4 py-3 text-sm font-semibold text-white" data-open-modal="modal-punch-confirm">退勤</button>
+        </div>
+        <button class="mt-6 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-employee-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-attendance-history" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">打刻履歴</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">メンバーID</th>
+                <th class="p-2 text-left">メンバー名</th>
+                <th class="p-2 text-left">日付</th>
+                <th class="p-2 text-left">曜日</th>
+                <th class="p-2 text-left">平日/休日</th>
+                <th class="p-2 text-left">通常休憩</th>
+                <th class="p-2 text-left">深夜休憩</th>
+                <th class="p-2 text-left">労働時間(丸め後)</th>
+                <th class="p-2 text-left">残業</th>
+                <th class="p-2 text-left">深夜</th>
+                <th class="p-2 text-left">休出</th>
+                <th class="p-2 text-left">総時間</th>
+                <th class="p-2 text-left">休暇</th>
+                <th class="p-2 text-left">遅早退・欠勤</th>
+                <th class="p-2 text-left">IN(前)</th>
+                <th class="p-2 text-left">OUT(前)</th>
+                <th class="p-2 text-left">IN(後)</th>
+                <th class="p-2 text-left">OUT(後)</th>
+                <th class="p-2 text-left">詳細</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">01234</td>
+                <td class="p-2">山田 太郎</td>
+                <td class="p-2">2025/05/18</td>
+                <td class="p-2">日</td>
+                <td class="p-2">休日</td>
+                <td class="p-2">1:00</td>
+                <td class="p-2">0:30</td>
+                <td class="p-2">8:00</td>
+                <td class="p-2">1:00</td>
+                <td class="p-2">0:00</td>
+                <td class="p-2">0:00</td>
+                <td class="p-2">9:00</td>
+                <td class="p-2">なし</td>
+                <td class="p-2">なし</td>
+                <td class="p-2">09:00</td>
+                <td class="p-2">18:15</td>
+                <td class="p-2">09:00</td>
+                <td class="p-2">18:00</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-attendance-detail">詳細</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-employee-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-attendance-detail" class="screen">
+      <div class="mx-auto max-w-2xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">打刻履歴詳細</h2>
+        <div class="mt-4 grid gap-2 text-sm text-slate-600">
+          <div>メンバーID: 01234</div>
+          <div>メンバー名: 山田 太郎</div>
+          <div>日付: 2025/05/18</div>
+          <div>曜日: 日</div>
+          <div>平日/休日: 休日</div>
+          <div>通常休憩: 1:00</div>
+          <div>深夜休憩: 0:30</div>
+          <div>労働時間(丸め後): 8:00</div>
+          <div>残業: 1:00</div>
+          <div>深夜: 0:00</div>
+          <div>休出: 0:00</div>
+          <div>総時間: 9:00</div>
+          <div>休暇: なし</div>
+          <div>遅早退・欠勤: なし</div>
+          <div>IN時刻(前): 09:00</div>
+          <div>OUT時刻(前): 18:15</div>
+          <div>IN時刻(後): 09:00</div>
+          <div>OUT時刻(後): 18:00</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-attendance-history">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-leave" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">有給申請</h2>
+          <div class="text-sm text-slate-600">残有給数: 8日</div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+          <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+          <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+          <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-screen-target="screen-leave-create">新規作成</button>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">申請日</th>
+                <th class="p-2 text-left">対象日</th>
+                <th class="p-2 text-left">日数</th>
+                <th class="p-2 text-left">理由</th>
+                <th class="p-2 text-left">状態</th>
+                <th class="p-2 text-left">詳細</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">2025/05/10</td>
+                <td class="p-2">2025/05/22</td>
+                <td class="p-2">1日</td>
+                <td class="p-2">私用</td>
+                <td class="p-2">申請中</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-leave-detail">詳細</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-employee-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-leave-create" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">有給申請作成</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="対象日" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="日数" />
+          <textarea class="w-full rounded-xl border border-slate-200 px-4 py-3" rows="3" placeholder="理由"></textarea>
+          <p class="hidden text-xs text-rose-500" data-error="leave-create">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-leave-confirm">申請する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-leave">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-leave-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-leave-detail" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">有給申請詳細</h2>
+        <div class="mt-4 space-y-2 text-sm text-slate-600">
+          <div>申請日: 2025/05/10</div>
+          <div>対象日: 2025/05/22</div>
+          <div>日数: 1日</div>
+          <div>理由: 私用</div>
+          <div>状態: 申請中</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-leave">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-payslip-list" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">給与明細一覧</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">対象月</th>
+                <th class="p-2 text-left">支給日</th>
+                <th class="p-2 text-left">合計支給額</th>
+                <th class="p-2 text-left">合計控除額</th>
+                <th class="p-2 text-left">差引支給額</th>
+                <th class="p-2 text-left">詳細</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">2025/04</td>
+                <td class="p-2">2025/05/25</td>
+                <td class="p-2">320,000</td>
+                <td class="p-2">48,000</td>
+                <td class="p-2">272,000</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-payslip-detail">詳細</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-employee-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-payslip-detail" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">給与明細詳細</h2>
+        <div class="mt-4 grid gap-4 text-sm text-slate-600 md:grid-cols-2">
+          <div class="rounded-2xl border border-slate-100 p-4">会社情報表示ブロック</div>
+          <div class="rounded-2xl border border-slate-100 p-4">対象月: 2025/04</div>
+          <div class="rounded-2xl border border-slate-100 p-4">支給日: 2025/05/25</div>
+          <div class="rounded-2xl border border-slate-100 p-4">支給内訳表示ブロック</div>
+          <div class="rounded-2xl border border-slate-100 p-4">控除内訳表示ブロック</div>
+          <div class="rounded-2xl border border-slate-100 p-4">差引支給額: 272,000</div>
+          <div class="rounded-2xl border border-slate-100 p-4">控除&加算項目の詳細表示ブロック</div>
+          <div class="rounded-2xl border border-slate-100 p-4">月次締めの自動項目表示ブロック</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-payslip-list">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-employee-change-list" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">従業員情報変更申請</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+            <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-screen-target="screen-employee-change-create">新規申請</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">申請日</th>
+                <th class="p-2 text-left">申請項目</th>
+                <th class="p-2 text-left">申請内容</th>
+                <th class="p-2 text-left">状態</th>
+                <th class="p-2 text-left">詳細</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">2025/05/05</td>
+                <td class="p-2">住所</td>
+                <td class="p-2">東京都港区</td>
+                <td class="p-2">申請中</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-employee-change-detail">詳細</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-employee-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-employee-change-create" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">従業員情報変更申請作成</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="氏名" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="住所" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="連絡先" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="緊急連絡先" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="銀行口座" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="控除&加算項目の希望値" />
+          <p class="hidden text-xs text-rose-500" data-error="employee-change-create">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-employee-change-confirm">申請する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-employee-change-list">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-employee-change-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-employee-change-detail" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">従業員情報変更申請詳細</h2>
+        <div class="mt-4 space-y-2 text-sm text-slate-600">
+          <div>氏名: 山田 太郎</div>
+          <div>住所: 東京都港区</div>
+          <div>連絡先: 090-0000-0000</div>
+          <div>緊急連絡先: 080-0000-0000</div>
+          <div>銀行口座: みずほ銀行 1234567</div>
+          <div>控除&加算項目の希望値: 住宅手当 +5,000</div>
+          <div>申請日: 2025/05/05</div>
+          <div>状態: 申請中</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-employee-change-list">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-leave-list" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">有給申請一覧（管理者）</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">申請者名</th>
+                <th class="p-2 text-left">申請日</th>
+                <th class="p-2 text-left">対象日</th>
+                <th class="p-2 text-left">日数</th>
+                <th class="p-2 text-left">理由</th>
+                <th class="p-2 text-left">状態</th>
+                <th class="p-2 text-left">詳細</th>
+                <th class="p-2 text-left">承認</th>
+                <th class="p-2 text-left">拒否</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">山田 太郎</td>
+                <td class="p-2">2025/05/10</td>
+                <td class="p-2">2025/05/22</td>
+                <td class="p-2">1日</td>
+                <td class="p-2">私用</td>
+                <td class="p-2">申請中</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-admin-leave-detail">詳細</button></td>
+                <td class="p-2"><button class="rounded-full bg-brand-700 px-3 py-1 text-white" data-open-modal="modal-admin-leave-approve">承認</button></td>
+                <td class="p-2"><button class="rounded-full border border-rose-200 px-3 py-1 text-rose-500" data-screen-target="screen-admin-leave-reject">拒否</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-leave-detail" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">有給申請詳細（管理者）</h2>
+        <div class="mt-4 space-y-2 text-sm text-slate-600">
+          <div>申請者名: 山田 太郎</div>
+          <div>申請日: 2025/05/10</div>
+          <div>対象日: 2025/05/22</div>
+          <div>日数: 1日</div>
+          <div>理由: 私用</div>
+          <div>状態: 申請中</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-leave-list">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-leave-reject" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">有給申請拒否理由入力</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <textarea class="w-full rounded-xl border border-slate-200 px-4 py-3" rows="4" placeholder="拒否理由"></textarea>
+          <p class="hidden text-xs text-rose-500" data-error="admin-leave-reject">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-rose-500 px-4 py-3 text-white" data-open-modal="modal-admin-leave-reject">拒否する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-leave-list">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-admin-leave-reject-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-admin-change-list" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">従業員情報変更申請一覧（管理者）</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">申請者名</th>
+                <th class="p-2 text-left">申請日</th>
+                <th class="p-2 text-left">申請項目</th>
+                <th class="p-2 text-left">申請内容</th>
+                <th class="p-2 text-left">状態</th>
+                <th class="p-2 text-left">詳細</th>
+                <th class="p-2 text-left">承認</th>
+                <th class="p-2 text-left">拒否</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">山田 太郎</td>
+                <td class="p-2">2025/05/05</td>
+                <td class="p-2">住所</td>
+                <td class="p-2">東京都港区</td>
+                <td class="p-2">申請中</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-admin-change-detail">詳細</button></td>
+                <td class="p-2"><button class="rounded-full bg-brand-700 px-3 py-1 text-white" data-open-modal="modal-admin-change-approve">承認</button></td>
+                <td class="p-2"><button class="rounded-full border border-rose-200 px-3 py-1 text-rose-500" data-screen-target="screen-admin-change-reject">拒否</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-change-detail" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">従業員情報変更申請詳細（管理者）</h2>
+        <div class="mt-4 space-y-2 text-sm text-slate-600">
+          <div>申請者名: 山田 太郎</div>
+          <div>申請日: 2025/05/05</div>
+          <div>申請項目: 住所</div>
+          <div>申請内容: 東京都港区</div>
+          <div>状態: 申請中</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-change-list">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-change-reject" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">従業員情報変更申請拒否理由入力</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <textarea class="w-full rounded-xl border border-slate-200 px-4 py-3" rows="4" placeholder="拒否理由"></textarea>
+          <p class="hidden text-xs text-rose-500" data-error="admin-change-reject">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-rose-500 px-4 py-3 text-white" data-open-modal="modal-admin-change-reject">拒否する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-change-list">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-admin-change-reject-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-monthly-close" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">月次締め作業</h2>
+          <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-monthly-close">今月の締めをする</button>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+          <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+          <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">対象月</th>
+                <th class="p-2 text-left">締め日</th>
+                <th class="p-2 text-left">状態</th>
+                <th class="p-2 text-left">控除&加算入力欄</th>
+                <th class="p-2 text-left">詳細</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">2025/04</td>
+                <td class="p-2">2025/04/30</td>
+                <td class="p-2">完了</td>
+                <td class="p-2"><input class="w-full rounded-lg border border-slate-200 px-2 py-1" placeholder="従業員ごとの控除&加算" /></td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-monthly-detail">詳細</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-monthly-detail" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">月次締め履歴詳細</h2>
+        <div class="mt-4 space-y-2 text-sm text-slate-600">
+          <div>出勤日数: 20</div>
+          <div>有給繰り越し: 5日</div>
+          <div>有給日数: 2日</div>
+          <div>有給残日数: 8日</div>
+          <div>残業時間: 10:00</div>
+          <div>総労働時間: 170:00</div>
+          <div>控除&加算項目の入力結果: 通勤手当 +8,000</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-monthly-close">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-attendance-list" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">打刻履歴管理</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+            <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-screen-target="screen-admin-attendance-create">新規追加</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">メンバーID</th>
+                <th class="p-2 text-left">メンバー名</th>
+                <th class="p-2 text-left">日付</th>
+                <th class="p-2 text-left">曜日</th>
+                <th class="p-2 text-left">平日/休日</th>
+                <th class="p-2 text-left">通常休憩</th>
+                <th class="p-2 text-left">深夜休憩</th>
+                <th class="p-2 text-left">労働時間(丸め後)</th>
+                <th class="p-2 text-left">残業</th>
+                <th class="p-2 text-left">深夜</th>
+                <th class="p-2 text-left">休出</th>
+                <th class="p-2 text-left">総時間</th>
+                <th class="p-2 text-left">休暇</th>
+                <th class="p-2 text-left">遅早退・欠勤</th>
+                <th class="p-2 text-left">IN(前)</th>
+                <th class="p-2 text-left">OUT(前)</th>
+                <th class="p-2 text-left">IN(後)</th>
+                <th class="p-2 text-left">OUT(後)</th>
+                <th class="p-2 text-left">詳細</th>
+                <th class="p-2 text-left">編集</th>
+                <th class="p-2 text-left">削除</th>
+                <th class="p-2 text-left">削除復活</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">01234</td>
+                <td class="p-2">山田 太郎</td>
+                <td class="p-2">2025/05/18</td>
+                <td class="p-2">日</td>
+                <td class="p-2">休日</td>
+                <td class="p-2">1:00</td>
+                <td class="p-2">0:30</td>
+                <td class="p-2">8:00</td>
+                <td class="p-2">1:00</td>
+                <td class="p-2">0:00</td>
+                <td class="p-2">0:00</td>
+                <td class="p-2">9:00</td>
+                <td class="p-2">なし</td>
+                <td class="p-2">なし</td>
+                <td class="p-2">09:00</td>
+                <td class="p-2">18:15</td>
+                <td class="p-2">09:00</td>
+                <td class="p-2">18:00</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-admin-attendance-detail">詳細</button></td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-admin-attendance-edit">編集</button></td>
+                <td class="p-2"><button class="rounded-full border border-rose-200 px-3 py-1 text-rose-500" data-open-modal="modal-admin-attendance-delete">削除</button></td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-open-modal="modal-admin-attendance-restore">削除復活</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-attendance-create" class="screen">
+      <div class="mx-auto max-w-3xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">打刻履歴新規追加</h2>
+        <div class="mt-4 grid gap-3 text-sm md:grid-cols-2">
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="メンバーID" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="メンバー名" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="日付" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="曜日" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="平日/休日" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="通常休憩" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="深夜休憩" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="労働時間(丸め後)" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="残業" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="深夜" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="休出" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="総時間" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="休暇" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="遅早退・欠勤" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="IN時刻(丸め前)" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="OUT時刻(丸め前)" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="IN時刻(丸め後)" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="OUT時刻(丸め後)" />
+        </div>
+        <p class="mt-3 hidden text-xs text-rose-500" data-error="admin-attendance-create">入力内容に不備があります。</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-admin-attendance-create">登録する</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-attendance-list">戻る</button>
+          <button class="text-xs underline" data-open-modal="modal-admin-attendance-create-error">dev: エラー表示</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-admin-attendance-detail" class="screen">
+      <div class="mx-auto max-w-2xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">打刻履歴詳細（管理者）</h2>
+        <div class="mt-4 grid gap-2 text-sm text-slate-600">
+          <div>メンバーID: 01234</div>
+          <div>メンバー名: 山田 太郎</div>
+          <div>日付: 2025/05/18</div>
+          <div>曜日: 日</div>
+          <div>平日/休日: 休日</div>
+          <div>通常休憩: 1:00</div>
+          <div>深夜休憩: 0:30</div>
+          <div>労働時間(丸め後): 8:00</div>
+          <div>残業: 1:00</div>
+          <div>深夜: 0:00</div>
+          <div>休出: 0:00</div>
+          <div>総時間: 9:00</div>
+          <div>休暇: なし</div>
+          <div>遅早退・欠勤: なし</div>
+          <div>IN時刻(前): 09:00</div>
+          <div>OUT時刻(前): 18:15</div>
+          <div>IN時刻(後): 09:00</div>
+          <div>OUT時刻(後): 18:00</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-attendance-list">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-attendance-edit" class="screen">
+      <div class="mx-auto max-w-3xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">打刻履歴編集</h2>
+        <div class="mt-4 grid gap-3 text-sm md:grid-cols-2">
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="メンバーID" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="メンバー名" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="日付" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="曜日" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="平日/休日" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="通常休憩" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="深夜休憩" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="労働時間(丸め後)" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="残業" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="深夜" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="休出" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="総時間" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="休暇" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="遅早退・欠勤" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="IN時刻(丸め前)" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="OUT時刻(丸め前)" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="IN時刻(丸め後)" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="OUT時刻(丸め後)" />
+        </div>
+        <p class="mt-3 hidden text-xs text-rose-500" data-error="admin-attendance-edit">入力内容に不備があります。</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-admin-attendance-update">更新する</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-attendance-list">戻る</button>
+          <button class="text-xs underline" data-open-modal="modal-admin-attendance-update-error">dev: エラー表示</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-admin-employee-list" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">従業員情報一覧</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+            <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-screen-target="screen-admin-employee-create">新規追加</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">メンバーID</th>
+                <th class="p-2 text-left">氏名</th>
+                <th class="p-2 text-left">所属</th>
+                <th class="p-2 text-left">雇用形態</th>
+                <th class="p-2 text-left">状態</th>
+                <th class="p-2 text-left">詳細</th>
+                <th class="p-2 text-left">編集</th>
+                <th class="p-2 text-left">削除</th>
+                <th class="p-2 text-left">削除復活</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">01234</td>
+                <td class="p-2">山田 太郎</td>
+                <td class="p-2">営業部</td>
+                <td class="p-2">正社員</td>
+                <td class="p-2">在籍</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-admin-employee-detail">詳細</button></td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-admin-employee-edit">編集</button></td>
+                <td class="p-2"><button class="rounded-full border border-rose-200 px-3 py-1 text-rose-500" data-open-modal="modal-admin-employee-delete">削除</button></td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-open-modal="modal-admin-employee-restore">削除復活</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-employee-create" class="screen">
+      <div class="mx-auto max-w-3xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">従業員情報新規追加</h2>
+        <div class="mt-4 grid gap-3 text-sm md:grid-cols-2">
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="氏名" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="住所" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="連絡先" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="緊急連絡先" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="銀行口座" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="控除&加算項目" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="ログインID" />
+        </div>
+        <p class="mt-3 hidden text-xs text-rose-500" data-error="admin-employee-create">入力内容に不備があります。</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-admin-employee-create">登録する</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-employee-list">戻る</button>
+          <button class="text-xs underline" data-open-modal="modal-admin-employee-create-error">dev: エラー表示</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-admin-employee-detail" class="screen">
+      <div class="mx-auto max-w-2xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">従業員情報詳細</h2>
+        <div class="mt-4 grid gap-2 text-sm text-slate-600">
+          <div>メンバーID: 01234</div>
+          <div>氏名: 山田 太郎</div>
+          <div>住所: 東京都港区</div>
+          <div>連絡先: 090-0000-0000</div>
+          <div>緊急連絡先: 080-0000-0000</div>
+          <div>銀行口座: みずほ銀行 1234567</div>
+          <div>控除&加算項目: 通勤手当</div>
+          <div>ログインID: yamada.t</div>
+          <div>所属: 営業部</div>
+          <div>雇用形態: 正社員</div>
+          <div>状態: 在籍</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-employee-list">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-employee-edit" class="screen">
+      <div class="mx-auto max-w-3xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">従業員情報編集</h2>
+        <div class="mt-4 grid gap-3 text-sm md:grid-cols-2">
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="メンバーID" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="氏名" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="住所" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="連絡先" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="緊急連絡先" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="銀行口座" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="控除&加算項目" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="ログインID" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="所属" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="雇用形態" />
+          <input class="rounded-xl border border-slate-200 px-4 py-3" placeholder="状態" />
+        </div>
+        <p class="mt-3 hidden text-xs text-rose-500" data-error="admin-employee-edit">入力内容に不備があります。</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-admin-employee-update">更新する</button>
+          <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-employee-list">戻る</button>
+          <button class="text-xs underline" data-open-modal="modal-admin-employee-update-error">dev: エラー表示</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-admin-admin-list" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">管理者情報一覧</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+            <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-screen-target="screen-admin-admin-create">新規追加</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">管理者ID</th>
+                <th class="p-2 text-left">氏名</th>
+                <th class="p-2 text-left">役割</th>
+                <th class="p-2 text-left">状態</th>
+                <th class="p-2 text-left">詳細</th>
+                <th class="p-2 text-left">編集</th>
+                <th class="p-2 text-left">削除</th>
+                <th class="p-2 text-left">削除復活</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">AD-01</td>
+                <td class="p-2">佐藤 花子</td>
+                <td class="p-2">システム管理</td>
+                <td class="p-2">在籍</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-admin-admin-detail">詳細</button></td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-admin-admin-edit">編集</button></td>
+                <td class="p-2"><button class="rounded-full border border-rose-200 px-3 py-1 text-rose-500" data-open-modal="modal-admin-admin-delete">削除</button></td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-open-modal="modal-admin-admin-restore">削除復活</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-admin-create" class="screen">
+      <div class="mx-auto max-w-2xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">管理者情報新規追加</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="氏名" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="連絡先" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="ログインID" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="役割" />
+          <p class="hidden text-xs text-rose-500" data-error="admin-admin-create">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-admin-admin-create">登録する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-admin-list">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-admin-admin-create-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-admin-admin-detail" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">管理者情報詳細</h2>
+        <div class="mt-4 space-y-2 text-sm text-slate-600">
+          <div>管理者ID: AD-01</div>
+          <div>氏名: 佐藤 花子</div>
+          <div>連絡先: 090-1111-2222</div>
+          <div>ログインID: admin.sato</div>
+          <div>役割: システム管理</div>
+          <div>状態: 在籍</div>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-admin-list">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-admin-admin-edit" class="screen">
+      <div class="mx-auto max-w-2xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">管理者情報編集</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="管理者ID" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="氏名" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="連絡先" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="ログインID" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="役割" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="状態" />
+          <p class="hidden text-xs text-rose-500" data-error="admin-admin-edit">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-admin-admin-update">更新する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-admin-list">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-admin-admin-update-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-deduction-list" class="screen">
+      <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">控除&加算項目編集</h2>
+          <div class="flex flex-wrap gap-2">
+            <input class="rounded-xl border border-slate-200 px-3 py-2 text-sm" placeholder="絞り込み・検索" />
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">並び替え</button>
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm">続きを表示</button>
+            <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-screen-target="screen-deduction-create">新規追加</button>
+          </div>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="sticky top-0 bg-slate-50 text-slate-500">
+              <tr>
+                <th class="p-2 text-left">項目名</th>
+                <th class="p-2 text-left">区分</th>
+                <th class="p-2 text-left">適用状態</th>
+                <th class="p-2 text-left">編集</th>
+                <th class="p-2 text-left">削除</th>
+                <th class="p-2 text-left">削除復活</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="p-2">通勤手当</td>
+                <td class="p-2">加算</td>
+                <td class="p-2">適用中</td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-screen-target="screen-deduction-edit">編集</button></td>
+                <td class="p-2"><button class="rounded-full border border-rose-200 px-3 py-1 text-rose-500" data-open-modal="modal-deduction-delete">削除</button></td>
+                <td class="p-2"><button class="rounded-full border border-slate-200 px-3 py-1" data-open-modal="modal-deduction-restore">削除復活</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="mt-4 rounded-xl border border-slate-200 px-4 py-3 text-sm" data-screen-target="screen-admin-home">戻る</button>
+      </div>
+    </section>
+
+    <section id="screen-deduction-create" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">控除&加算項目新規追加</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="項目名" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="区分（控除/加算）" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="適用状態" />
+          <p class="hidden text-xs text-rose-500" data-error="deduction-create">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-deduction-create">登録する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-deduction-list">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-deduction-create-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-deduction-edit" class="screen">
+      <div class="mx-auto max-w-xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">控除&加算項目編集</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="項目名" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="区分（控除/加算）" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="適用状態" />
+          <p class="hidden text-xs text-rose-500" data-error="deduction-edit">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-deduction-update">更新する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-deduction-list">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-deduction-update-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-company-info" class="screen">
+      <div class="mx-auto max-w-2xl rounded-3xl bg-white/90 p-6 shadow-xl">
+        <h2 class="text-lg font-semibold">会社情報編集</h2>
+        <div class="mt-4 space-y-3 text-sm">
+          <textarea class="w-full rounded-xl border border-slate-200 px-4 py-3" rows="2" placeholder="会社情報"></textarea>
+          <textarea class="w-full rounded-xl border border-slate-200 px-4 py-3" rows="2" placeholder="給与明細に表示する会社情報"></textarea>
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="締め日設定" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="分丸め込み設定" />
+          <input class="w-full rounded-xl border border-slate-200 px-4 py-3" placeholder="休日設定" />
+          <p class="hidden text-xs text-rose-500" data-error="company-info">入力内容に不備があります。</p>
+          <div class="flex flex-wrap gap-2">
+            <button class="rounded-xl bg-brand-700 px-4 py-3 text-white" data-open-modal="modal-company-info-update">更新する</button>
+            <button class="rounded-xl border border-slate-200 px-4 py-3" data-screen-target="screen-admin-home">戻る</button>
+            <button class="text-xs underline" data-open-modal="modal-company-info-error">dev: エラー表示</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="modal-loading" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-8 text-center shadow-xl">
+      <div class="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-brand-200 border-t-brand-700"></div>
+      <p class="mt-4 text-sm text-slate-600">ローディング中</p>
+    </div>
+  </div>
+
+  <div id="modal-login-error" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">ログインID入力エラーを表示</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-password-confirm" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">パスワードを変更しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-password-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-password-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">パスワード変更完了</p>
+      <div class="mt-4 flex justify-end">
+        <button id="password-complete-ok" class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal>OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-password-error" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">入力エラーを表示</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-logout" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">ログアウトしますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-loading" data-next-screen="screen-login">OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-punch-confirm" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">打刻を確定しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-punch-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-punch-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">打刻完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-punch">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-leave-confirm" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">有給申請を送信しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-leave-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-leave-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">有給申請完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-leave">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-employee-change-confirm" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">変更申請を送信しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-employee-change-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-employee-change-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">変更申請完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-employee-change-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-leave-approve" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">有給申請を承認しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-leave-approve-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-leave-approve-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">承認完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-leave-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-leave-reject" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">有給申請を拒否しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-rose-500 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-leave-reject-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-leave-reject-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">拒否完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-leave-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-change-approve" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">変更申請を承認しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-change-approve-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-change-approve-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">承認完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-change-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-change-reject" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">変更申請を拒否しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-rose-500 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-change-reject-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-change-reject-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">拒否完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-change-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-monthly-close" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">月次締めを実行しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-monthly-close-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-monthly-close-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">月次締め完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-monthly-close">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-attendance-create" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">打刻履歴を登録しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-attendance-create-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-attendance-create-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">登録完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-attendance-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-attendance-update" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">打刻履歴を更新しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-attendance-update-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-attendance-update-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">更新完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-attendance-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-attendance-delete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">打刻履歴を削除しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-rose-500 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-attendance-delete-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-attendance-delete-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">削除完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-attendance-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-attendance-restore" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">打刻履歴を復活しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-attendance-restore-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-attendance-restore-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">復活完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-attendance-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-employee-create" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">従業員情報を登録しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-employee-create-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-employee-create-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">登録完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-employee-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-employee-update" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">従業員情報を更新しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-employee-update-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-employee-update-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">更新完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-employee-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-employee-delete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">従業員情報を削除しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-rose-500 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-employee-delete-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-employee-delete-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">削除完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-employee-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-employee-restore" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">従業員情報を復活しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-employee-restore-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-employee-restore-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">復活完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-employee-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-admin-create" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">管理者情報を登録しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-admin-create-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-admin-create-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">登録完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-admin-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-admin-update" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">管理者情報を更新しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-admin-update-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-admin-update-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">更新完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-admin-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-admin-delete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">管理者情報を削除しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-rose-500 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-admin-delete-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-admin-delete-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">削除完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-admin-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-admin-restore" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">管理者情報を復活しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-admin-admin-restore-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-admin-admin-restore-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">復活完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-admin-admin-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-deduction-create" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">控除&加算項目を登録しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-deduction-create-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-deduction-create-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">登録完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-deduction-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-deduction-update" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">控除&加算項目を更新しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-deduction-update-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-deduction-update-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">更新完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-deduction-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-deduction-delete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">控除&加算項目を削除しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-rose-500 px-4 py-2 text-sm text-white" data-open-modal="modal-deduction-delete-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-deduction-delete-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">削除完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-deduction-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-deduction-restore" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">控除&加算項目を復活しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-deduction-restore-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-deduction-restore-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">復活完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-deduction-list">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-company-info-update" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">会社情報を更新しますか？</p>
+      <div class="mt-4 flex gap-2">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-open-modal="modal-company-info-update-complete" data-close-modal>OK</button>
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-company-info-update-complete" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">更新完了</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl bg-brand-700 px-4 py-2 text-sm text-white" data-close-modal data-screen-target="screen-company-info">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-notification" class="modal fixed inset-0 z-50 items-center justify-center bg-slate-900/40">
+    <div class="rounded-3xl bg-white/90 p-6 shadow-xl">
+      <p class="text-sm">お知らせはここに表示されます。</p>
+      <div class="mt-4 flex justify-end">
+        <button class="rounded-xl border border-slate-200 px-4 py-2 text-sm" data-close-modal>閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const screens = document.querySelectorAll('.screen');
+    const modals = document.querySelectorAll('.modal');
+
+    let lastHome = 'screen-employee-home';
+
+    const isAdminScreen = (id) => id.startsWith('screen-admin') || id.startsWith('screen-deduction') || id.startsWith('screen-company') || id.startsWith('screen-monthly');
+    const isEmployeeScreen = (id) => id.startsWith('screen-employee') || id.startsWith('screen-attendance') || id.startsWith('screen-leave') || id.startsWith('screen-payslip') || id.startsWith('screen-punch');
+
+    const showScreen = (id) => {
+      screens.forEach((screen) => screen.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (id === 'screen-admin-home' || isAdminScreen(id)) {
+        lastHome = 'screen-admin-home';
+      }
+      if (id === 'screen-employee-home' || isEmployeeScreen(id)) {
+        lastHome = 'screen-employee-home';
+      }
+    };
+
+    const openModal = (id) => {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('active');
+      }
+    };
+
+    const closeModals = () => {
+      modals.forEach((modal) => modal.classList.remove('active'));
+    };
+
+    document.addEventListener('click', (event) => {
+      const screenTarget = event.target.closest('[data-screen-target]');
+      const openModalBtn = event.target.closest('[data-open-modal]');
+      const closeModalBtn = event.target.closest('[data-close-modal]');
+
+      if (screenTarget) {
+        const targetId = screenTarget.getAttribute('data-screen-target');
+        showScreen(targetId);
+      }
+
+      if (openModalBtn) {
+        const modalId = openModalBtn.getAttribute('data-open-modal');
+        openModal(modalId);
+
+        const nextScreen = openModalBtn.getAttribute('data-next-screen');
+        if (modalId === 'modal-loading' && nextScreen) {
+          setTimeout(() => {
+            closeModals();
+            showScreen(nextScreen);
+          }, 900);
+        }
+      }
+
+      if (closeModalBtn) {
+        closeModals();
+      }
+    });
+
+    document.getElementById('home-logo').addEventListener('click', () => {
+      showScreen(lastHome);
+    });
+
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      showScreen(lastHome === 'screen-admin-home' ? 'screen-hamburger-admin' : 'screen-hamburger-employee');
+    });
+
+    document.getElementById('password-complete-ok').addEventListener('click', () => {
+      showScreen(lastHome === 'screen-admin-home' ? 'screen-hamburger-admin' : 'screen-hamburger-employee');
+    });
+
+    document.querySelectorAll('.tab-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = button.getAttribute('data-tab-target');
+        const container = button.closest('.rounded-3xl');
+        container.querySelectorAll('.tab-content').forEach((content) => {
+          content.classList.add('hidden');
+        });
+        container.querySelectorAll('.tab-button').forEach((btn) => {
+          btn.classList.remove('bg-brand-700', 'text-white');
+          btn.classList.add('bg-slate-100', 'text-slate-500');
+        });
+        document.getElementById(target).classList.remove('hidden');
+        button.classList.add('bg-brand-700', 'text-white');
+        button.classList.remove('bg-slate-100', 'text-slate-500');
+      });
+    });
+
+    const errorToggles = {
+      'modal-login-error': 'login',
+      'modal-password-error': 'password-employee',
+      'modal-leave-error': 'leave-create',
+      'modal-employee-change-error': 'employee-change-create',
+      'modal-admin-leave-reject-error': 'admin-leave-reject',
+      'modal-admin-change-reject-error': 'admin-change-reject',
+      'modal-admin-attendance-create-error': 'admin-attendance-create',
+      'modal-admin-attendance-update-error': 'admin-attendance-edit',
+      'modal-admin-employee-create-error': 'admin-employee-create',
+      'modal-admin-employee-update-error': 'admin-employee-edit',
+      'modal-admin-admin-create-error': 'admin-admin-create',
+      'modal-admin-admin-update-error': 'admin-admin-edit',
+      'modal-deduction-create-error': 'deduction-create',
+      'modal-deduction-update-error': 'deduction-edit',
+      'modal-company-info-error': 'company-info'
+    };
+
+    document.addEventListener('click', (event) => {
+      const openModalBtn = event.target.closest('[data-open-modal]');
+      if (openModalBtn) {
+        const modalId = openModalBtn.getAttribute('data-open-modal');
+        if (errorToggles[modalId]) {
+          const errorEl = document.querySelector(`[data-error="${errorToggles[modalId]}"]`);
+          if (errorEl) {
+            errorEl.classList.toggle('hidden');
+          }
+        }
+      }
+    });
+
+    const canvas = document.getElementById('motion-bg');
+    const ctx = canvas.getContext('2d');
+    const blobs = Array.from({ length: 6 }).map((_, i) => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: 240 + i * 30,
+      dx: (Math.random() - 0.5) * 4.2,
+      dy: (Math.random() - 0.5) * 4.2
+    }));
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      blobs.forEach((blob, index) => {
+        const gradient = ctx.createRadialGradient(blob.x, blob.y, 0, blob.x, blob.y, blob.r);
+        gradient.addColorStop(0, `rgba(59, 116, 255, 0.${4 + index})`);
+        gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(blob.x, blob.y, blob.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        blob.x += blob.dx;
+        blob.y += blob.dy;
+
+        if (blob.x < -blob.r || blob.x > canvas.width + blob.r) blob.dx *= -1;
+        if (blob.y < -blob.r || blob.y > canvas.height + blob.r) blob.dy *= -1;
+      });
+
+      requestAnimationFrame(draw);
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    draw();
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
