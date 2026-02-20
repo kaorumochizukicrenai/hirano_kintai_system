@@ -1,0 +1,23 @@
+<div class="card">
+    <h2>有給申請入力</h2>
+    <div class="form-group">
+        <label>対象日時</label>
+        <input type="date">
+    </div>
+    <div class="form-group">
+        <label>期間種別</label>
+        <select>
+            <option>全日</option>
+            <option>半日</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>申請理由</label>
+        <textarea rows="3" placeholder="理由を入力してください"></textarea>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn btn-primary" data-confirm="申請しますか？" data-next="paid_leave_confirm">申請する</button>
+        <button class="btn btn-secondary" data-goto="paid_leave_confirm">キャンセル</button>
+    </div>
+</div>

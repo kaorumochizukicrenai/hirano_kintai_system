@@ -1,0 +1,27 @@
+<div class="card">
+    <h2>管理者ホーム</h2>
+    
+    <div class="warning-message" style="cursor: pointer;" data-goto="paid_leave_manage">
+        <strong>⚠️ 未承認申請:</strong> 有給申請が 3 件あります。
+    </div>
+    <div class="warning-message" style="cursor: pointer;" data-goto="employee_info_change_manage">
+        <strong>⚠️ 未確認申請:</strong> 従業員情報変更申請が 1 件あります。
+    </div>
+    <div class="warning-message" style="cursor: pointer;" data-goto="monthly_closing">
+        <strong>⚠️ 月次締め未完了:</strong> 1月度の締めが完了していません。
+    </div>
+
+    <h3>管理メニュー</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <button class="btn btn-block" data-goto="paid_leave_manage">有給申請管理</button>
+        <button class="btn btn-block" data-goto="employee_info_change_manage">情報変更申請管理</button>
+        <button class="btn btn-block" data-goto="monthly_closing">月次締め作業</button>
+        <button class="btn btn-block" data-goto="monthly_closing_history">月次締め履歴</button>
+        <button class="btn btn-block" data-goto="employee_time_record_manage">従業員打刻履歴</button>
+        <button class="btn btn-block" data-goto="admin_attendance_view">勤怠状態閲覧</button>
+        <button class="btn btn-block" data-goto="employee_info_manage">従業員・集計情報</button>
+        <button class="btn btn-block" data-goto="admin_info_manage">管理者情報</button>
+        <button class="btn btn-block" data-goto="deduction_addition_edit">控除・加算編集</button>
+        <button class="btn btn-block" data-goto="company_info_edit">会社情報編集</button>
+    </div>
+</div>

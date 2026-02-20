@@ -1,0 +1,62 @@
+<div class="card">
+    <h2>勤怠状態閲覧 (管理者)</h2>
+    
+    <div style="margin-bottom: 1rem; text-align: right;">
+        <button class="btn btn-primary">⬇ CSV出力</button>
+    </div>
+
+    <div class="form-group" style="display: flex; gap: 0.5rem; align-items: flex-end;">
+        <div>
+            <label>開始日</label>
+            <input type="date" value="2026-02-01">
+        </div>
+        <div>
+            <label>終了日</label>
+            <input type="date" value="2026-02-28">
+        </div>
+        <button class="btn">表示</button>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="min-width: 1000px;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>氏名</th>
+                    <th>日付</th>
+                    <th>区分</th>
+                    <th>労働</th>
+                    <th>残業</th>
+                    <th>IN1</th>
+                    <th>OUT1</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>emp001</td>
+                    <td>山田 太郎</td>
+                    <td>2/19</td>
+                    <td>平日</td>
+                    <td>8:00</td>
+                    <td>0:00</td>
+                    <td>09:00</td>
+                    <td>18:00</td>
+                </tr>
+                <tr>
+                    <td>emp002</td>
+                    <td>佐藤 花子</td>
+                    <td>2/19</td>
+                    <td>平日</td>
+                    <td>8:00</td>
+                    <td>0:00</td>
+                    <td>09:30</td>
+                    <td>18:30</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 1rem;">
+        <button class="btn btn-secondary" data-goto="admin_home">ホームへ戻る</button>
+    </div>
+</div>

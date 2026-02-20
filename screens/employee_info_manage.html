@@ -1,0 +1,41 @@
+<div class="card">
+    <h2>従業員情報＆勤怠集計情報</h2>
+    
+    <div style="margin-bottom: 1rem; display: flex; gap: 0.5rem;">
+        <input type="text" placeholder="名前やIDで検索">
+        <button class="btn">検索</button>
+        <button class="btn btn-primary" style="margin-left: auto;">＋ 新規従業員追加</button>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="min-width: 1000px;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>氏名</th>
+                    <th>雇用形態</th>
+                    <th>交通費(加)</th>
+                    <th>住民税(控)</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>emp001</td>
+                    <td>山田 太郎</td>
+                    <td>正社員</td>
+                    <td>10000</td>
+                    <td>5000</td>
+                    <td>
+                        <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem;">詳細/編集</button>
+                        <button class="btn btn-danger" style="padding: 0.25rem 0.5rem;" data-confirm="削除しますか？">削除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 1rem;">
+        <button class="btn btn-secondary" data-goto="admin_home">ホームへ戻る</button>
+    </div>
+</div>

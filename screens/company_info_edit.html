@@ -1,0 +1,70 @@
+<div class="card">
+    <h2>会社情報編集</h2>
+    
+    <div class="form-group">
+        <label>締め日</label>
+        <select>
+            <option>末日</option>
+            <option>20日</option>
+            <option>15日</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>丸め込み設定</label>
+        <select>
+            <option>1分</option>
+            <option>5分</option>
+            <option selected>15分</option>
+            <option>30分</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>所定労働時間 (時間/日)</label>
+        <div style="margin-left: 1rem;">
+            <label style="font-weight: normal;">正社員: <input type="number" value="8" style="width: 60px;"></label>
+            <label style="font-weight: normal;">パート: <input type="number" value="6" style="width: 60px;"></label>
+            <label style="font-weight: normal;">アルバイト: <input type="number" value="4" style="width: 60px;"></label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>勤続年数別 有給付与日数</label>
+        <div style="margin-left: 1rem;">
+            <p>0.5年 → 10日</p>
+            <p>1.5年 → 11日</p>
+            <p>2.5年 → 12日</p>
+            <button class="btn btn-secondary" style="font-size: 0.8rem;">編集</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>休日設定 (クリックで選択)</label>
+        <div style="border: 1px solid #ccc; padding: 1rem; text-align: center;">
+            <strong>2026年 2月</strong>
+            <table style="margin: 0.5rem auto; width: auto;">
+                <tr>
+                    <th style="color: red;">日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th style="color: blue;">土</th>
+                </tr>
+                <tr>
+                    <td style="color: red;">1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td style="color: blue;">7</td>
+                </tr>
+                <tr>
+                    <td style="color: red;">8</td><td>9</td><td>10</td><td style="background: #f8d7da;">11</td><td>12</td><td>13</td><td style="color: blue;">14</td>
+                </tr>
+                <tr>
+                    <td style="color: red;">15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td style="color: blue;">21</td>
+                </tr>
+                <tr>
+                    <td style="color: red;">22</td><td style="background: #f8d7da;">23</td><td>24</td><td>25</td><td>26</td><td>27</td><td style="color: blue;">28</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn btn-primary" data-confirm="設定を保存しますか？">保存する</button>
+        <button class="btn btn-secondary" data-goto="admin_home">キャンセル</button>
+    </div>
+</div>

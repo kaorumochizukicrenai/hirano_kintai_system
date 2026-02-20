@@ -1,0 +1,23 @@
+<div class="card">
+    <h2>従業員ホーム</h2>
+    <div style="margin-bottom: 1rem;">
+        <strong>メンバーID:</strong> emp001 / <strong>名前:</strong> 山田 太郎
+    </div>
+    
+    <div class="warning-message">
+        <strong>⚠️ 打刻忘れ警告:</strong> 昨日の退勤打刻がありません。
+    </div>
+
+    <div style="background: #e9ecef; padding: 1rem; border-radius: 4px; text-align: center; margin-bottom: 1rem;">
+        <h3>現在の状態: 未出勤</h3>
+        <p>最終打刻: 2026/02/19 18:00 (退勤)</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <button class="btn btn-block" data-goto="time_record_input" style="grid-column: span 2; padding: 1.5rem; font-size: 1.2rem;">⏱️ 打刻する</button>
+        <button class="btn btn-secondary btn-block" data-goto="time_record_history">📅 打刻履歴</button>
+        <button class="btn btn-secondary btn-block" data-goto="employee_attendance_view">📊 勤怠閲覧</button>
+        <button class="btn btn-secondary btn-block" data-goto="paid_leave_confirm">🏖️ 有給確認・申請</button>
+        <button class="btn btn-secondary btn-block" data-goto="employee_info_change">📝 情報変更申請</button>
+    </div>
+</div>

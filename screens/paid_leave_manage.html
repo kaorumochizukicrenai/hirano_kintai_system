@@ -1,0 +1,46 @@
+<div class="card">
+    <h2>有給申請管理</h2>
+    
+    <div style="margin-bottom: 1rem;">
+        <input type="text" placeholder="名前で検索">
+        <button class="btn">検索</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>申請者</th>
+                <th>日時</th>
+                <th>期間</th>
+                <th>理由</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background: #fff3cd;">
+                <td>佐藤 花子</td>
+                <td>2026/03/01</td>
+                <td>全日</td>
+                <td>冠婚葬祭</td>
+                <td>
+                    <button class="btn btn-primary" style="padding: 0.25rem 0.5rem;" data-confirm="承認しますか？">承認</button>
+                    <button class="btn btn-danger" style="padding: 0.25rem 0.5rem;" data-confirm="拒否しますか？">拒否</button>
+                </td>
+            </tr>
+            <tr>
+                <td>鈴木 一郎</td>
+                <td>2026/02/10</td>
+                <td>半日</td>
+                <td>通院</td>
+                <td>
+                    <span style="color: green;">承認済</span>
+                    <button class="btn btn-secondary" style="padding: 0.25rem 0.5rem;" data-confirm="削除しますか？">削除</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 1rem;">
+        <button class="btn btn-secondary" data-goto="admin_home">ホームへ戻る</button>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="card">
+    <h2>従業員情報変更申請</h2>
+    <div class="form-group">
+        <label>変更理由 <span style="color: red;">*必須</span></label>
+        <textarea rows="2" placeholder="引越しのため 等"></textarea>
+    </div>
+    
+    <hr style="margin: 1.5rem 0;">
+
+    <div class="form-group">
+        <label>名前</label>
+        <input type="text" value="山田 太郎">
+    </div>
+    <div class="form-group">
+        <label>電話番号</label>
+        <input type="tel" value="090-1234-5678">
+    </div>
+    <div class="form-group">
+        <label>メールアドレス</label>
+        <input type="email" value="taro.yamada@example.com">
+    </div>
+    <div class="form-group">
+        <label>住所</label>
+        <input type="text" value="東京都渋谷区...">
+    </div>
+    
+    <h3>振込口座情報</h3>
+    <div class="form-group">
+        <label>銀行名</label>
+        <input type="text" value="みずほ銀行">
+    </div>
+    <div class="form-group">
+        <label>支店名</label>
+        <input type="text" value="渋谷支店">
+    </div>
+    <div class="form-group">
+        <label>口座番号</label>
+        <input type="text" value="1234567">
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn btn-primary" data-confirm="変更を申請しますか？" data-next="employee_home">申請する</button>
+        <button class="btn btn-secondary" data-goto="employee_home">キャンセル</button>
+    </div>
+</div>

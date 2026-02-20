@@ -1,0 +1,48 @@
+<div class="card">
+    <h2>打刻履歴</h2>
+    <div class="form-group" style="display: flex; gap: 0.5rem;">
+        <input type="month" value="2026-02">
+        <button class="btn">検索</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>打刻日時</th>
+                <th>種別</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2026/02/20 08:55</td>
+                <td><span style="color: green;">出勤</span></td>
+            </tr>
+            <tr>
+                <td>2026/02/19 18:00</td>
+                <td><span style="color: red;">退勤</span></td>
+            </tr>
+            <tr>
+                <td>2026/02/19 13:00</td>
+                <td><span style="color: blue;">戻り</span></td>
+            </tr>
+            <tr>
+                <td>2026/02/19 12:00</td>
+                <td><span style="color: orange;">休憩</span></td>
+            </tr>
+            <tr>
+                <td>2026/02/19 09:00</td>
+                <td><span style="color: green;">出勤</span></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div style="text-align: center;">
+        <button class="btn btn-secondary" disabled>前へ</button>
+        <span> 1 / 1 </span>
+        <button class="btn btn-secondary" disabled>次へ</button>
+    </div>
+    
+    <div style="margin-top: 1rem;">
+        <button class="btn btn-secondary" data-goto="employee_home">ホームへ戻る</button>
+    </div>
+</div>

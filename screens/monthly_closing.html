@@ -1,0 +1,58 @@
+<div class="card">
+    <h2>月次締め作業</h2>
+    
+    <div class="form-group" style="display: flex; gap: 1rem; align-items: center;">
+        <div>
+            <label>開始日</label>
+            <input type="date" value="2026-01-01">
+        </div>
+        <div>
+            <label>終了日</label>
+            <input type="date" value="2026-01-31">
+        </div>
+        <button class="btn btn-primary" style="margin-top: 1.5rem;" data-confirm="1月度の締めを確定しますか？この操作は取り消せません。" data-next="monthly_closing_history">今月の締めをする（確定）</button>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="min-width: 1000px;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>氏名</th>
+                    <th>出勤日数</th>
+                    <th>有給</th>
+                    <th>残業</th>
+                    <th>総労働</th>
+                    <th>交通費(加)</th>
+                    <th>住民税(控)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>emp001</td>
+                    <td>山田 太郎</td>
+                    <td>20日</td>
+                    <td>1日</td>
+                    <td>10:00</td>
+                    <td>170:00</td>
+                    <td><input type="number" value="10000" style="width: 80px;"></td>
+                    <td><input type="number" value="5000" style="width: 80px;"></td>
+                </tr>
+                <tr>
+                    <td>emp002</td>
+                    <td>佐藤 花子</td>
+                    <td>18日</td>
+                    <td>0日</td>
+                    <td>0:00</td>
+                    <td>144:00</td>
+                    <td><input type="number" value="8000" style="width: 80px;"></td>
+                    <td><input type="number" value="4000" style="width: 80px;"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 1rem;">
+        <button class="btn btn-secondary" data-goto="admin_home">ホームへ戻る</button>
+    </div>
+</div>

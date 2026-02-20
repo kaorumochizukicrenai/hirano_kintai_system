@@ -1,0 +1,35 @@
+<div class="card">
+    <h2>控除&加算項目編集</h2>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+            <h3>➕ 加算項目</h3>
+            <div class="form-group" style="display: flex; gap: 0.5rem;">
+                <input type="text" placeholder="新規項目名">
+                <button class="btn btn-primary">追加</button>
+            </div>
+            <ul>
+                <li>交通費 <button class="btn btn-danger" style="padding: 0.1rem 0.3rem; font-size: 0.8rem;">×</button></li>
+                <li>医療費還付 <button class="btn btn-danger" style="padding: 0.1rem 0.3rem; font-size: 0.8rem;">×</button></li>
+                <li>休日手当 <button class="btn btn-danger" style="padding: 0.1rem 0.3rem; font-size: 0.8rem;">×</button></li>
+            </ul>
+        </div>
+        
+        <div>
+            <h3>➖ 控除項目</h3>
+            <div class="form-group" style="display: flex; gap: 0.5rem;">
+                <input type="text" placeholder="新規項目名">
+                <button class="btn btn-primary">追加</button>
+            </div>
+            <ul>
+                <li>国民健康保険 <button class="btn btn-danger" style="padding: 0.1rem 0.3rem; font-size: 0.8rem;">×</button></li>
+                <li>住民税 <button class="btn btn-danger" style="padding: 0.1rem 0.3rem; font-size: 0.8rem;">×</button></li>
+                <li>厚生年金 <button class="btn btn-danger" style="padding: 0.1rem 0.3rem; font-size: 0.8rem;">×</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: 1rem;">
+        <button class="btn btn-secondary" data-goto="admin_home">ホームへ戻る</button>
+    </div>
+</div>

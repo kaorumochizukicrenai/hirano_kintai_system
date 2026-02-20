@@ -1,0 +1,15 @@
+<div class="card" style="text-align: center;">
+    <h2>打刻入力</h2>
+    <div style="font-size: 2rem; margin-bottom: 2rem;">2026/02/20 (金) 08:55</div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 400px; margin: 0 auto;">
+        <button class="btn btn-block" style="background: #28a745; padding: 2rem; font-size: 1.5rem;" data-confirm="出勤しますか？" data-next="employee_home">☀️ 出勤</button>
+        <button class="btn btn-block" style="background: #dc3545; padding: 2rem; font-size: 1.5rem;" data-confirm="退勤しますか？" data-next="employee_home">🌙 退勤</button>
+        <button class="btn btn-block" style="background: #ffc107; color: #333; padding: 2rem; font-size: 1.5rem;" data-confirm="休憩に入りますか？" data-next="employee_home">☕ 休憩</button>
+        <button class="btn btn-block" style="background: #17a2b8; padding: 2rem; font-size: 1.5rem;" data-confirm="戻りますか？" data-next="employee_home">🔙 戻り</button>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <button class="btn btn-secondary" data-goto="employee_home">ホームへ戻る</button>
+    </div>
+</div>

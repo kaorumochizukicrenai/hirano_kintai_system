@@ -1,0 +1,41 @@
+<div class="card">
+    <h2>従業員情報変更申請管理</h2>
+    
+    <div style="margin-bottom: 1rem;">
+        <input type="text" placeholder="名前で検索">
+        <button class="btn">検索</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>申請者</th>
+                <th>変更理由</th>
+                <th>変更箇所</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background: #fff3cd;">
+                <td>田中 次郎</td>
+                <td>引越し</td>
+                <td>住所, 電話番号</td>
+                <td>
+                    <button class="btn btn-primary" style="padding: 0.25rem 0.5rem;" data-confirm="確認済みにしますか？">確認済</button>
+                </td>
+            </tr>
+            <tr>
+                <td>高橋 優子</td>
+                <td>結婚</td>
+                <td>名前, 銀行口座</td>
+                <td>
+                    <span style="color: green;">確認済</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 1rem;">
+        <button class="btn btn-secondary" data-goto="admin_home">ホームへ戻る</button>
+    </div>
+</div>
